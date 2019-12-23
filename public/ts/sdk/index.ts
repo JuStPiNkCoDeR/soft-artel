@@ -1,4 +1,4 @@
-import { GeoData } from '../../../types';
+import { GeoData } from '../../../src/GEO_Data_SDK/types';
 
 const api_host = `https://vast-escarpment-79117.herokuapp.com/?ip=`;
 

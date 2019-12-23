@@ -1,28 +1,28 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { GeoData } from '../types';
-import validator from './validation';
-const geoip = require('geoip-lite');
+import { Injectable } from '@nestjs/common';
+import GeoData from './GEO_Data_SDK';
 
+/**
+ * @author Los' Alexander
+ * @class AppService
+ *
+ * Класс нашего приложения
+ */
 @Injectable()
 export class AppService {
-  getGeoData(ip: string): GeoData {
-    if (!validator.parseIP(ip)) throw new HttpException({
-      status: HttpStatus.BAD_REQUEST,
-      error: 'IP is incorrect'
-    }, 400);
+  // GEO_Data_SDK
+  private _geo: GeoData = new GeoData();
 
-    const data = geoip.lookup(ip);
+  /**
+   * запускает процесс получения гео данных
+   *
+   * @param ip
+   */
+  public fetchGeoData(ip: string): void {
+    this._geo.getGeoData(ip);
+  }
 
-    if (!data) throw new HttpException({
-      status: HttpStatus.NOT_FOUND,
-      error: 'No data for the IP'
-    }, 404);
-
-    return {
-      lat: data.ll[0],
-      lng: data.ll[1],
-      country: data.country,
-      city: data.city
-    }
+  // геттер для нашего SDK
+  get geoAPI(): GeoData {
+    return this._geo;
   }
 }
